@@ -1,0 +1,85 @@
+# 预期基线 — 五个复现包
+# 用途：外部验证者拿自己的 RESULT.json 与本文件比对；只比"断言数"和"关键数字"，不比耗时。
+# 本轮生成环境见各包 RESULT.json（Windows 11 / Py3.13，Linux / Py3.12 各跑一轮）。
+{
+  "generated_utc": "2026-11-26",
+  "note": "耗时与 PASS 计数允许跨平台差异；断言总数与失败数为硬要求。",
+  "packs": {
+    "p1_uibc_core": {
+      "pin": "uibc-core==0.5.5",
+      "route": "PyPI",
+      "checks_total": 11,
+      "expected_failed": 0,
+      "required_needles": [
+        "expected FAIL: tampered content",
+        "verifies against itself",
+        "key substitution caught by pinning",
+        "[1/8]",
+        "[4/8]",
+        "[6/8]",
+        "[8/8]"
+      ]
+    },
+    "p2_uibc_bench": {
+      "pin": "git@8395bcccc39f",
+      "route": "git clone",
+      "checks_total": 9,
+      "expected_failed": 0,
+      "expected_summary": {
+        "PASS": {"min": 170, "max": 171, "cross_platform_delta": 1},
+        "FAIL": 8,
+        "BLOCKED": 4,
+        "REFERENCE": 1
+      },
+      "note": "FAIL 8 为预期（s01 平台契约 7 + s11 J17.1 收据过期 1）；BLOCKED 4 在补齐 cryptography 后消失"
+    },
+    "p3_lgd_eval": {
+      "pin": "git@3ac73d016877",
+      "route": "git clone + pytest",
+      "checks_total": 4,
+      "expected_failed": 0,
+      "expected_pytest": "13 passed",
+      "expected_npm": "E404"
+    },
+    "p4_aitb_bench": {
+      "pin_source": {
+        "public": "git@f2fa09d",
+        "local_patched": "git@5cb5cbacf89584a0433d04de8e6740f42edf832c"
+      },
+      "route": "source install (pip install -e .)",
+      "checks_total": 9,
+      "expected_failed": 0,
+      "expected_demo": {"rc": 0, "PASS": 3},
+      "expected_selftest": {"rc": 1, "PASS": 1, "FAIL": 3},
+      "negctl_field": {
+        "present_at": "5cb5cba",
+        "absent_at": "f2fa09d",
+        "value_when_present": 0
+      }
+    },
+    "p5_synomosai_mcp": {
+      "pin": "git@dd3784f",
+      "route": "single-file stdlib",
+      "checks_total": 21,
+      "expected_failed": 0,
+      "expected_protocol": {
+        "protocolVersion": "2025-03-26",
+        "server_version": "1.2.2",
+        "tools_count": 6,
+        "tools": [
+          "audit_evidence_chain",
+          "a3_assess",
+          "passport_lookup",
+          "compliance_checklist",
+          "gov_scan",
+          "lgd_knowledge"
+        ]
+      },
+      "expected_gov_scan": {
+        "dirty": {"clean": false, "verdict": "驳回"},
+        "clean_with_fp": {"clean": true, "verdict": "通过"},
+        "clean_without_fp": {"clean": false, "reason": "版权指纹缺失"}
+      }
+    }
+  }
+}

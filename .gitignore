@@ -1,0 +1,7 @@
+_src/
+.venv/
+__pycache__/
+*.pyc
+RESULT.json
+runs/
+.codex/
