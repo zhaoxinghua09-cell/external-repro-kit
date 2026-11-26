@@ -54,6 +54,7 @@
       "negctl_field": {
         "present_at": "5cb5cba",
         "absent_at": "f2fa09d",
+        "merged_to_main": "2026-11-26 as 6abb069 (PR #6, 4 platform checks green)",
         "value_when_present": 0
       }
     },
